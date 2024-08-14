@@ -33,9 +33,14 @@ d+b
 # Laços de repetição
 
 x <- 0
-for (i in 1:20) {
+soma <- 0
+for (i in 1:10) {
   x <- x + 1
+  soma <- soma + x
 }
+
+x
+soma
 
 # ---------------------------------------------------------------------
 
@@ -51,7 +56,7 @@ any(duplicated(aniversarios))
 
 
 
-# função que calcula aprobabilidade de haver alguém entre n pessoas que faz
+# função que calcula a probabilidade de haver alguém entre n pessoas que faz
 # aniversário no mesmo dia
 
 calcula_probabilidade <- function(n) {
@@ -67,7 +72,7 @@ calcula_probabilidade <- function(n) {
   
 }
 
-calcula_probabilidade(n = 366)
+calcula_probabilidade(n = 70)
 
 
 
@@ -92,3 +97,16 @@ while (acertos < 4) {
 semanas/52
 
 
+# condicionais 
+
+number1 <- 5
+number2 <- 6
+number3 <- 0
+
+if (number1 > number2) {
+  number3 <- number1 + number2
+} else {
+  number3 <- number1 - number2
+}
+
+number3
