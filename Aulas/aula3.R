@@ -31,9 +31,16 @@ dados[1, 4]
 homens <- dados[dados$Sex == "male",]
 summary(homens)
 table(homens$Survived)
-barplot(table(homens$Survived))
 
 mulheres <- dados[dados$Sex == "female",]
 summary(mulheres)
 table(mulheres$Survived)
-barplot(table(mulheres$Survived))
+
+
+terceira_homens <- homens[homens$Pclass == 3, ]
+table(terceira_homens$Survived)
+
+
+
+
+
