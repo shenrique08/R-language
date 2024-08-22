@@ -1,5 +1,5 @@
 titanic <- read.table(file = "titanic.txt", sep = ",", header = TRUE)
-
+library(ggplot2)
 titanic <- titanic[,-c(1,9:12)]
 str(titanic)
 
