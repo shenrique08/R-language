@@ -1,0 +1,61 @@
+---
+title: "Tutorial para classificar pinguins"
+author: "kakaroto"
+lang: "pt"
+date: 2024-08-23
+format: html
+editor: visual
+---
+
+# Objetivos do tutorial
+
+O objetivo deste tutorial é criar um modelo de classificação que seja capaz de prever a espécie de um pinguim e a partir de seu peso, tamanho da asa e tamanho do bico e profundidade do bico. Para isso, construiremos do zero o modelo knn.
+
+# Lendo o conjunto
+
+Vamos iniciar nosso trabalho lendo o pacote palmerpenguins e salvando o conjunto em um objeto pinguins
+
+```{r}
+library(palmerpenguins)
+pinguins <- penguins
+str(penguins)
+
+```
+
+A seguir, vamos imprimir um resumo estatístico de cada uma das variáveis dos dados.
+
+```{r}
+summary(pinguins)
+```
+
+A partir do resumo das variáveis, identificamos alguns valores faltantes. Portanto, vamos resolvê-los.
+
+```{r}
+pinguins <- na.omit(pinguins)
+summary(pinguins)
+
+
+```
+
+------------------------------------------------------------------------
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).

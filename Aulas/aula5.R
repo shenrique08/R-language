@@ -44,3 +44,15 @@ for (j in 1:nrow(teste)) {
 
 teste$Species == resultados
 mean(teste$Species == resultados)
+
+
+
+
+# como criar uma lista
+
+
+lista_de_numeros <- list(10, 34, 23, 998, "bacao", TRUE)
+lista_de_numeros
+is.list(lista_de_numeros)
+
+
