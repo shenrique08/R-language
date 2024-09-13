@@ -1,6 +1,7 @@
 library(rvest) # biblioteca utilizada para fazer a raspagem
 library(dplyr) # bibliotea para manipular os dados
 library(ggplot2)
+library(stringr)
 
 
 url <- "https://pt.wikipedia.org/wiki/Lista_de_unidades_federativas_do_Brasil_por_alfabetiza%C3%A7%C3%A3o"
@@ -73,6 +74,43 @@ ggplot(data = estados, aes(fill = taxa)) +
 
 
 
+
+url <- "https://www.timeout.com/film/best-horror-films"
+html <- read_html(url)
+
+nomes <- html |> 
+  html_elements("h3._h3_cuogz_1") |>
+  html_text2()
+
+posicao <- str_extract_all(string = nomes, pattern = "^\\d+") # o ^ pega o inicio da frase o \\d é para pegar os digitos e o + é para pegar 1 ou mais vezes
+posicao <- unlist(posicao)
+posicao <- as.numeric(posicao)
+
+anos <- str_extract_all(string = nomes, pattern = "\\(\\d+\\)$") # $ pega o fim da frase
+anos <- unlist(str_extract_all(anos, "\\d+")) 
+anos <- as.numeric(anos)
+
+titulos <- str_remove_all(string = nomes, "^\\d+\\.\\s+") # o \\s significa espaço
+titulos <- str_remove_all(string = titulos, "\\s+\\(\\d+\\)$")
+
+filmes <- data.frame(posicao, anos, titulos)
+
+write.csv(filmes, file = "files_horror.csv", row.names = FALSE) # cria um arquivo csv
+
+
+url2 <- "https://www.bosshunting.com.au/entertainment/movies/best-movies-imdb/"
+html2 <- read_html(url2)
+
+dados <- html2 |>
+  html_elements("ol.wp-block-list>li") |>
+  html_text2()
+
+
+anos2 <- str_extract_all(dados, "\\(\\d+\\)")
+anos2 <- unlist(str_extract_all(anos2, "\\d+")) 
+anos2 <- as.numeric(anos2)
+
+diretores <- str_extract_all(dados, "dir\\.")
 
 
 
