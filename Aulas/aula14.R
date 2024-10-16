@@ -34,3 +34,4 @@ modelo_linear
 
 summary(femur)
 
+
