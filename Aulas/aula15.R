@@ -26,3 +26,24 @@ names(dados)
 cor(dados[, 3:6])
 
 ggplot(data = dados, aes(x = flipper_length_mm, y = body_mass_g, color = species))+geom_point()+geom_smooth(method = "lm")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+femur <- read.csv("femur.csv")
+str(femur)
+
