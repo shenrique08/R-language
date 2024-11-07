@@ -165,6 +165,220 @@ print(paste("Sensibilidade da floresta aleatória:", round(sensitivity_rf, 4)))
 
 
 
+#                    ********* QUESTÃO 2 *************
 
+#(A)
+
+cerebelo_data <- read.csv("cerebelo.csv")
+
+
+# Gráfico de dispersão do peso do cerebelo em relação ao peso do corpo
+plot(cerebelo_data$Body_g, cerebelo_data$Cerebellum_g,
+     xlab = "Peso do Corpo (g)",
+     ylab = "Peso do Cerebelo (g)",
+     main = "Dispersão: Peso do Cerebelo vs Peso do Corpo",
+     pch = 19, col = "blue")
+
+# Gráfico de dispersão dos valores log-transformados
+plot(cerebelo_data$Log_body, cerebelo_data$Log_cerebellum,
+     xlab = "Log(Peso do Corpo)",
+     ylab = "Log(Peso do Cerebelo)",
+     main = "Dispersão: Log(Peso do Cerebelo) vs Log(Peso do Corpo)",
+     pch = 19, col = "red")
+
+
+
+# A escala logarítmica tende a mostrar uma relação mais linear entre as variáveis, sugerindo que o aumento do peso do cerebelo é proporcional ao aumento do peso do corpo.
+
+# O primeiro gráfico utiliza valores originais e pode apresentar uma curva crescente
+
+# No segundo gráfico, a transformação logarítmica geralmente lineariza a relação, facilitando a análise de proporcionalidade.
+
+
+
+
+
+# *******  (B) ********
+
+
+
+# Calcular o coeficiente de correlação entre o peso do cerebelo e o peso do corpo
+cor_original <- cor(cerebelo_data$Body_g, cerebelo_data$Cerebellum_g)
+cat("Correlação (valores originais):", cor_original, "\n")
+
+# Calcular o coeficiente de correlação entre os valores log-transformados
+cor_log <- cor(cerebelo_data$Log_body, cerebelo_data$Log_cerebellum)
+cat("Correlação (valores log-transformados):", cor_log, "\n")
+
+
+
+# *******   (C) ********
+
+
+# Calcular o coeficiente de correlação entre o logaritmo do peso do cerebelo e o logaritmo do peso do corpo
+cor_log <- cor(cerebelo_data$Log_body, cerebelo_data$Log_cerebellum)
+cat("Correlação (valores log-transformados):", cor_log, "\n")
+
+
+
+# *******   (D) ********
+
+
+# Coeficiente com valores originais: A correlação entre os pesos do corpo e do cerebelo nos dados originais pode ser menor ou apresentar uma relação menos linear, especialmente se houver uma grande variação nos tamanhos dos animais, já que os dados sem transformação podem não seguir uma relação direta.
+
+
+# Coeficiente com valores log-transformados: A correlação entre os logaritmos dos pesos geralmente será mais próxima de 1 (ou seja, mais alta), indicando uma relação linear mais forte. A transformação logarítmica reduz as diferenças extremas nos dados e revela proporcionalidades, sugerindo que o peso do cerebelo aumenta em proporção ao peso do corpo.
+
+
+
+# *******   (E) ********
+
+
+# Ajustar o modelo de regressão linear usando os valores log-transformados
+modelo_log <- lm(Log_cerebellum ~ Log_body, data = cerebelo_data)
+
+# Visualizar o resumo do modelo para interpretação dos resultados
+summary(modelo_log)
+
+# Equação da reta de regressão
+coeficientes <- coef(modelo_log)
+cat("Equação da reta: Log_cerebellum =", coeficientes[1], "+", coeficientes[2], "* Log_body", "\n")
+
+# Gráfico com a reta de regressão adicionada
+plot(cerebelo_data$Log_body, cerebelo_data$Log_cerebellum,
+     xlab = "Log(Peso do Corpo)",
+     ylab = "Log(Peso do Cerebelo)",
+     main = "Dispersão: Log(Peso do Cerebelo) vs Log(Peso do Corpo) com Reta de Regressão",
+     pch = 19, col = "red")
+
+# Adicionar a reta de regressão ao gráfico
+abline(modelo_log, col = "blue", lwd = 2)
+
+
+
+# *******   (F) ********
+
+
+# Obter os resíduos do modelo de regressão
+residuos <- residuals(modelo_log)
+
+# Teste de Shapiro-Wilk para verificar normalidade dos resíduos
+shapiro_test <- shapiro.test(residuos)
+cat("Valor p do teste de Shapiro-Wilk:", shapiro_test$p.value, "\n")
+
+# Gráfico Q-Q dos resíduos
+qqnorm(residuos)
+qqline(residuos, col = "blue", lwd = 2)
+
+
+
+# Caso o valor p do teste de Shapiro-Wilk seja alto e o gráfico Q-Q mostre os resíduos alinhados, pode-se concluir que os resíduos seguem uma distribuição Normal. Se o valor p for baixo ou o gráfico Q-Q mostrar desvios significativos, isso indica uma possível violação da normalidade dos resíduos.
+
+
+
+# *******   (F) ********
+
+
+
+
+peso_corpo <- 100000
+
+
+log_peso_corpo <- log10(peso_corpo)
+
+# Usar a equação da reta de regressão para prever o logaritmo do peso do cerebelo
+log_peso_cerebelo_pred <- coeficientes[1] + coeficientes[2] * log_peso_corpo
+
+# Transformar a previsão de volta para a escala original em gramas
+peso_cerebelo_pred <- 10^log_peso_cerebelo_pred
+cat("Peso previsto do cerebelo:", peso_cerebelo_pred, "gramas\n")
+
+
+
+
+#                    ********* QUESTÃO 3 *************
+
+
+
+
+# (A)
+
+
+
+dados <- read.csv("olive.txt", sep = ",", header = TRUE)
+
+dados_num <- dados[, 2:9]
+
+# Padronizar os dados
+dados_padronizados <- scale(dados_num)
+
+head(dados_padronizados)
+
+
+
+# (B)
+
+
+# Construir o modelo K-means com k = 3
+set.seed(123)  
+modelo_kmeans <- kmeans(dados_padronizados, centers = 3)
+
+
+dados$cluster_k3 <- as.factor(modelo_kmeans$cluster)
+library(ggplot2)
+
+# Criar o gráfico de barras
+ggplot(dados, aes(x = cluster_k3, fill = region)) +
+  geom_bar() +
+  labs(title = "Distribuição dos Azeites por Cluster e Região",
+       x = "Cluster K-means",
+       y = "Quantidade de Azeites") +
+  theme_minimal()
+
+
+
+# o gráfico de barras exibe um padrão regional em relação aos clusters ou se as distribuição dos azeites nas regiões estão misturados entre os clusters.
+
+# Por exemplo, norte da Itália é forte o cluster 3. Já para o sul, o cluster 2 ficou forte. Enquanto que no cluster 1 ficou equilibrado
+
+
+# (C)
+
+
+
+set.seed(123) 
+modelo_kmeans_4 <- kmeans(dados_padronizados, centers = 4)
+
+# Adicionar os clusters ao conjunto de dados
+dados$cluster_k4 <- as.factor(modelo_kmeans_4$cluster)
+
+
+ggplot(dados, aes(x = cluster_k4, fill = region)) +
+  geom_bar() +
+  labs(title = "Distribuição dos Azeites por Cluster (k = 4) e Região",
+       x = "Cluster K-means (k = 4)",
+       y = "Quantidade de Azeites") +
+  theme_minimal()
+
+
+modelo_kmeans_5 <- kmeans(dados_padronizados, centers = 5)
+
+
+dados$cluster_k5 <- as.factor(modelo_kmeans_5$cluster)
+
+# Criar o gráfico de barras para k = 5
+ggplot(dados, aes(x = cluster_k5, fill = region)) +
+  geom_bar() +
+  labs(title = "Distribuição dos Azeites por Cluster (k = 5) e Região",
+       x = "Cluster K-means (k = 5)",
+       y = "Quantidade de Azeites") +
+  theme_minimal()
+
+
+
+
+# o gráfico de barras exibe um padrão regional em relação aos clusters ou se as distribuição dos azeites nas regiões estão misturados entre os clusters.
+
+# Por exemplo, norte da Itália é forte o cluster 3. Já para o sul, o cluster 2 ficou forte. Enquanto que no cluster 1 ficou equilibrado. Para k 4 o norte da Itália e para k 5 apareceu Sardina
 
 
